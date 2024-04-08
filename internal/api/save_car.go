@@ -15,13 +15,13 @@ func NewCarSaver(log *slog.Logger, car Cars) http.HandlerFunc {
 
 		err := render.DecodeJSON(r.Body, &req)
 		if err != nil {
-			log.Warn("fail to decode json", http.StatusBadRequest)
+			log.Debug("fail to decode json", http.StatusBadRequest)
 		}
-		resp := client.Client(req.RegNums)
+		resp := client.Client(log, req.RegNums)
 
 		err = car.SaveCar(log, resp)
 		if err != nil {
-			log.Warn("fail to save to DB: ", http.StatusBadRequest)
+			log.Debug("fail to save to DB: ", http.StatusBadRequest)
 		}
 	}
 }

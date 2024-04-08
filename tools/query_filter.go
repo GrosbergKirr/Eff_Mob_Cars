@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+//Functions for making queries:
+
 func QueryFilterSelect(req models.Car, page string) string {
 	query := "select * from car "
 	flag := false

@@ -15,13 +15,16 @@ func NewCarUpdater(log *slog.Logger, car Cars) http.HandlerFunc {
 
 		err := render.DecodeJSON(r.Body, &req)
 		if err != nil {
-			log.Warn("fail to decode json", http.StatusBadRequest)
+			log.Debug("fail to decode json", http.StatusBadRequest)
 		}
+
+		// Set query for DB
 		query := tools.QueryFilterUpdateCar(w, req)
 
+		// Update info in DB
 		err = car.UpdateCar(log, query)
 		if err != nil {
-			log.Warn("failed to update car info,", err)
+			log.Debug("failed to update car info,", err)
 		}
 
 	}

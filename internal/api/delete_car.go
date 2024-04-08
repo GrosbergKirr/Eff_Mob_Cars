@@ -14,7 +14,7 @@ func NewDeleter(log *slog.Logger, del Cars) http.HandlerFunc {
 
 		err := render.DecodeJSON(r.Body, &req)
 		if err != nil {
-			log.Warn("fail to decode json", http.StatusBadRequest)
+			log.Debug("fail to decode json", http.StatusBadRequest)
 		}
 
 		err = del.DeleteCar(log, req.RegNum)
