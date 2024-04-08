@@ -1,0 +1,219 @@
+openapi: "3.0.3"
+info:
+  title: Car_info
+  version: "0.0.1"
+tags:
+  - name: Cars
+paths:
+  /show:
+    parameters:
+      - $ref: "#/components/parameters/InfoCars"
+    get:
+      summary: Получение машин по категориям
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: CatInfoRequest
+              properties:
+                regNum:
+                  type:
+                    string
+                  example:
+                    X123XX150
+                mark:
+                  type:
+                    string
+                  example:
+                    Lada
+                model:
+                  type:
+                    string
+                  example:
+                    Granta
+                year:
+                  type:
+                    integer
+                  example:
+                    2002
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  title: Cars
+                  required:
+                    - regNum
+                    - mark
+                    - model
+                    - year
+                    - owner
+                  properties:
+                    regNum:
+                      type:
+                        string
+                      example:
+                        X123XX150
+                    mark:
+                      type:
+                        string
+                      example:
+                        Lada
+                    model:
+                      type:
+                        string
+                      example:
+                        Granta
+                    year:
+                      type:
+                        integer
+                      example:
+                        2002
+                    owner:
+                      $ref: '#/components/schemas/People'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /delete:
+    delete:
+      summary: Удаление машин по номеру
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - regNum
+              properties:
+                regNum:
+                  type:
+                    string
+                  example:
+                    X123XX150
+      responses:
+        '200':
+          description: ok
+        "400":
+          description: Bad Request
+  /update:
+    post:
+      summary: Обновление данных о машине (требуются полные данные, за исключением владельца)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: CatInfoRequest
+              required:
+                - regNum
+                - mark
+                - model
+                - year
+              properties:
+                regNum:
+                  type:
+                    string
+                  example:
+                    X123XX150
+                mark:
+                  type:
+                    string
+                  example:
+                    Lada
+                model:
+                  type:
+                    string
+                  example:
+                    Granta
+                year:
+                  type:
+                    integer
+                  example:
+                    2002
+      responses:
+        "200":
+          description: ok
+        "400":
+          description: Bad request
+  /save:
+    post:
+      summary: Добавление новых машин, с запросом их данных на стороннем сервере
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: SaveCars
+              required:
+                - regNums
+              properties:
+                regNum:
+                  type:
+                    array
+                  example:
+                    [X123XX150]
+      responses:
+        "200":
+          description: Ok
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal server error
+components:
+  parameters:
+    InfoCars:
+      name: page
+      in: query
+      required: true
+      schema:
+        type: string
+  schemas:
+    Car:
+      type: object
+      required:
+        - regNum
+        - mark
+        - model
+        - owner
+
+      properties:
+        regNum:
+          type: string
+          example: X123XX150
+        mark:
+          type: string
+          example: Lada
+        model:
+          type: string
+          example: Vesta
+        year:
+          type: integer
+          example: 2002
+        owner:
+          $ref: '#/components/schemas/People'
+
+
+    People:
+      type: object
+      required:
+        - name
+        - surname
+
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+
