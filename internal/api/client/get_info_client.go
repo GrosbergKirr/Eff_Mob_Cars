@@ -8,6 +8,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"os"
 )
 
 type GetInfoClient struct {
@@ -19,17 +20,17 @@ func Client(log *slog.Logger, regNum []string) []models.CarInfo {
 	for i := range regNum {
 		client := http.Client{}
 
-		// Get url for client from .env
-		//urlBody, exists := os.LookupEnv("CLIENT_URL")
-		//if !exists {
-		//	log.Debug("set CLIENT_URL env variable")
-		//}
+		//Get url for client from .env
+		urlBody, exists := os.LookupEnv("CLIENT_URL")
+		if !exists {
+			log.Debug("set CLIENT_URL env variable")
+		}
 
-		//url := urlBody + regNum[i]
+		url := urlBody + regNum[i]
 
 		body := []byte{}
 
-		url := "http://localhost:8082/info?regNum=" + regNum[i]
+		//url := "http://localhost:8082/info?regNum=" + regNum[i]
 		fmt.Println(regNum[i])
 		fmt.Println(url)
 
