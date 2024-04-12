@@ -8,8 +8,11 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
-	"os"
 )
+
+type GetInfoClient struct {
+	ReGNum string `json:"regNum"`
+}
 
 func Client(log *slog.Logger, regNum []string) []models.CarInfo {
 	var infoResponse []models.CarInfo
@@ -17,18 +20,22 @@ func Client(log *slog.Logger, regNum []string) []models.CarInfo {
 		client := http.Client{}
 
 		// Get url for client from .env
-		urlBody, exists := os.LookupEnv("CLIENT_URL")
-		if !exists {
-			log.Debug("set CLIENT_URL env variable")
-		}
+		//urlBody, exists := os.LookupEnv("CLIENT_URL")
+		//if !exists {
+		//	log.Debug("set CLIENT_URL env variable")
+		//}
 
-		url := urlBody + regNum[i]
-		body := `{"regNum:" + regNum}`
-		bodyByte := []byte(body)
+		//url := urlBody + regNum[i]
+
+		body := []byte{}
+
+		url := "http://localhost:8082/info?regNum=" + regNum[i]
+		fmt.Println(regNum[i])
+		fmt.Println(url)
 
 		//Setup request
 		req, err := http.NewRequest(
-			"GET", url, bytes.NewBuffer(bodyByte))
+			"GET", url, bytes.NewBuffer(body))
 		if err != nil {
 			log.Debug("failed to send request", err)
 
@@ -43,9 +50,7 @@ func Client(log *slog.Logger, regNum []string) []models.CarInfo {
 
 		// Stdout info:
 		fmt.Println("response Status: ", resp.Status)
-		fmt.Println("response Headers: ", resp.Header)
 		fmt.Println("response Body: ", resp.Body)
-		fmt.Println("response StatusCode: ", resp.StatusCode)
 
 		// Work with response
 		responseBody, err := io.ReadAll(resp.Body)

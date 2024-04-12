@@ -3,6 +3,7 @@ package api
 import (
 	"Eff_Mob/internal/api/client"
 	"Eff_Mob/models"
+	"fmt"
 	"github.com/go-chi/render"
 	"log/slog"
 	"net/http"
@@ -17,6 +18,7 @@ func NewCarSaver(log *slog.Logger, car Cars) http.HandlerFunc {
 		if err != nil {
 			log.Debug("fail to decode json", http.StatusBadRequest)
 		}
+		fmt.Println(req.RegNums)
 		resp := client.Client(log, req.RegNums)
 
 		err = car.SaveCar(log, resp)
